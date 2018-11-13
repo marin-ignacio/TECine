@@ -11,6 +11,13 @@ CREATE DATABASE "TECine"
     TABLESPACE = pg_default
     CONNECTION LIMIT = -1;
 	
+CREATE TABLE Administrator(		
+	_ID				INT				NOT NULL,
+	_Username		VARCHAR(20)		NOT NULL,
+	_Password		VARCHAR(20)		NOT NULL,
+	PRIMARY KEY(_ID)
+);
+
 CREATE TABLE Director(
 	_ID 		INT 			NOT NULL,
 	_FName 		VARCHAR(40) 	NOT NULL,
@@ -35,7 +42,7 @@ CREATE TABLE Movie(
 	_ID 			INT 			NOT NULL,
 	_Title 			VARCHAR(40) 	NOT NULL,
 	_Duration_min 	INT 			NOT NULL,
-	_Description	VARCHAR(200) 	NOT NULL,
+	_Description	VARCHAR(1000) 	NOT NULL,
 	_Image			BYTEA			NOT NULL,
 
 	PRIMARY KEY(_ID)
@@ -114,30 +121,28 @@ CREATE TABLE Seats_Reserved(
 	PRIMARY KEY(_Reservation_ID,_Seat_ID)
 ) ;
 				
-ALTER TABLE Directors_per_Movie ADD FOREIGN KEY(Director_ID) REFERENCES Director(_ID);
-ALTER TABLE Directors_per_Movie ADD FOREIGN KEY(Movie_ID) REFERENCES Movie(_ID);
+ALTER TABLE Directors_per_Movie ADD FOREIGN KEY(_Director_ID) REFERENCES Director(_ID);
+ALTER TABLE Directors_per_Movie ADD FOREIGN KEY(_Movie_ID) REFERENCES Movie(_ID);
 
-ALTER TABLE Actors_per_Movie ADD FOREIGN KEY(Actor_ID) REFERENCES Actor(_ID);
-ALTER TABLE Actors_per_Movie ADD FOREIGN KEY(Movie_ID) REFERENCES Movie(_ID);	
+ALTER TABLE Actors_per_Movie ADD FOREIGN KEY(_Actor_ID) REFERENCES Actor(_ID);
+ALTER TABLE Actors_per_Movie ADD FOREIGN KEY(_Movie_ID) REFERENCES Movie(_ID);	
 
-ALTER TABLE Genders_per_Movie ADD FOREIGN KEY(Gender_ID) REFERENCES	Gender(_ID);
-ALTER TABLE Genders_per_Movie ADD FOREIGN KEY(Movie_ID) REFERENCES Movie(_ID);	
+ALTER TABLE Genders_per_Movie ADD FOREIGN KEY(_Gender_ID) REFERENCES	Gender(_ID);
+ALTER TABLE Genders_per_Movie ADD FOREIGN KEY(_Movie_ID) REFERENCES Movie(_ID);	
 
-ALTER TABLE Auditoriums_per_cinema ADD FOREIGN KEY(Cinema_ID) REFERENCES Cinema(_ID);
-ALTER TABLE Auditoriums_per_cinema ADD FOREIGN KEY(Auditorium_ID)REFERENCES Auditorium(_ID);	
+ALTER TABLE Auditoriums_per_cinema ADD FOREIGN KEY(_Cinema_ID) REFERENCES Cinema(_ID);
+ALTER TABLE Auditoriums_per_cinema ADD FOREIGN KEY(_Auditorium_ID)REFERENCES Auditorium(_ID);	
 
-ALTER TABLE Seats_per_Auditorium ADD FOREIGN KEY(Auditorium_ID) REFERENCES Auditorium(_ID);
-ALTER TABLE Seats_per_Auditorium ADD FOREIGN KEY (Seat_ID) REFERENCES Seat(_ID);
+ALTER TABLE Seats_per_Auditorium ADD FOREIGN KEY(_Auditorium_ID) REFERENCES Auditorium(_ID);
+ALTER TABLE Seats_per_Auditorium ADD FOREIGN KEY (_Seat_ID) REFERENCES Seat(_ID);
 
-ALTER TABLE Screening ADD FOREIGN KEY(Cinema_ID) REFERENCES	Cinema(_ID);
-ALTER TABLE Screening ADD FOREIGN KEY(Auditorium_ID) REFERENCES	Auditorium(_ID);
-ALTER TABLE Screening ADD FOREIGN KEY(Movie_ID) REFERENCES Movie(_ID);
+ALTER TABLE Screening ADD FOREIGN KEY(_Cinema_ID) REFERENCES	Cinema(_ID);
+ALTER TABLE Screening ADD FOREIGN KEY(_Auditorium_ID) REFERENCES	Auditorium(_ID);
+ALTER TABLE Screening ADD FOREIGN KEY(_Movie_ID) REFERENCES Movie(_ID);
 
-ALTER TABLE Reservation ADD FOREIGN KEY(Screening_ID) REFERENCES Screening(_ID);
+ALTER TABLE Reservation ADD FOREIGN KEY(_Screening_ID) REFERENCES Screening(_ID);
 
-ALTER TABLE Seats_Reserved ADD FOREIGN KEY(Reservation_ID) REFERENCES Reservation(_ID);
-ALTER TABLE Seats_Reserved ADD FOREIGN KEY(Seat_ID) REFERENCES Seat(_ID);
-
-
+ALTER TABLE Seats_Reserved ADD FOREIGN KEY(_Reservation_ID) REFERENCES Reservation(_ID);
+ALTER TABLE Seats_Reserved ADD FOREIGN KEY(_Seat_ID) REFERENCES Seat(_ID);
 
 
