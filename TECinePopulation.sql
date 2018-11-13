@@ -1,3 +1,4 @@
+
 INSERT INTO Administrator
 	(_ID, _Username, _Password)
 VALUES
@@ -9,11 +10,11 @@ VALUES
 INSERT INTO Movie
 	(_ID, _Title, _Duration_min, _Description, _Image)
 VALUES
-	(1,'Spirited Away',125,'Perdida en el bosque, una niña de 10 años conoce animales, fantasmas y criaturas extrañas.', bytea('C:\Users\REIRA\Documents\PROYECTO 2 BASES DE DATOS\IMAGENES\SPIRITED AWAY.jpg')),
-	(2,'Big Heroes',108,'Cuando un giro inesperado de eventos los sumerge en el medio de un peligroso plan, un niño prodigio, su robot y sus amigos se convierten en héroes de alta tecnología en una misión para salvar su ciudad.',bytea('C:\Users\REIRA\Documents\PROYECTO 2 BASES DE DATOS\IMAGENES\BIG HEROES.jpg')),
-	(3,'The Jungle Book',107,'Después de ser rescatado por la pantera Bagheera en la selva, una manada de lobos cría al recién nacido Mowgli. La vida feliz y apacible de Mowgli junto a su familia adoptiva se rompe en mil pedazos cuando llega el peligroso tigre Shere Khan.',bytea('C:\Users\REIRA\Documents\PROYECTO 2 BASES DE DATOS\IMAGENES\THE JUNGLE BOOK.jpeg')),
-	(4,'The Guardians of the Galaxy: Vol 1',122,'Un aventurero espacial se convierte en la presa de unos cazadores de tesoros después de que él roba el orbe de un villano traicionero, y cuando descubre su poder, él debe encontrar la forma de unir a unos rivales para salvar al universo.',bytea('C:\Users\REIRA\Documents\PROYECTO 2 BASES DE DATOS\IMAGENES\GUARDIANS OF THE GALAXY.jpg')),
-	(5,'Christopher Robin',104,'Christopher Robin ha crecido y, ahora que es adulto, ha olvidado a sus amigos de la infancia y ha perdido el rumbo. Winnie the Pooh y sus compañeros viajan a Londres para salvar a Christopher y ayudarle a reencontrar la alegría.',bytea('C:\Users\REIRA\Documents\PROYECTO 2 BASES DE DATOS\IMAGENES\CHRISTOPHER ROBIN.jpg'));
+	(1,'Spirited Away',125,'Perdida en el bosque, una niña de 10 años conoce animales, fantasmas y criaturas extrañas.', pg_read_binary_file('C:\SPIRITED_AWAY.jpg')),
+	(2,'Big Heroes',108,'Cuando un giro inesperado de eventos los sumerge en el medio de un peligroso plan, un niño prodigio, su robot y sus amigos se convierten en héroes de alta tecnología en una misión para salvar su ciudad.',pg_read_binary_file('C:\BIG_HEROES.jpg')),
+	(3,'The Jungle Book',107,'Después de ser rescatado por la pantera Bagheera en la selva, una manada de lobos cría al recién nacido Mowgli. La vida feliz y apacible de Mowgli junto a su familia adoptiva se rompe en mil pedazos cuando llega el peligroso tigre Shere Khan.',pg_read_binary_file('C:\THE_JUNGLE_BOOK.jpeg')),
+	(4,'The Guardians of the Galaxy: Vol 1',122,'Un aventurero espacial se convierte en la presa de unos cazadores de tesoros después de que él roba el orbe de un villano traicionero, y cuando descubre su poder, él debe encontrar la forma de unir a unos rivales para salvar al universo.',pg_read_binary_file('C:\GUARDIANS_OF_THE_GALAXY.jpg')),
+	(5,'Christopher Robin',104,'Christopher Robin ha crecido y, ahora que es adulto, ha olvidado a sus amigos de la infancia y ha perdido el rumbo. Winnie the Pooh y sus compañeros viajan a Londres para salvar a Christopher y ayudarle a reencontrar la alegría.',pg_read_binary_file('C:\CHRISTOPHER_ROBIN.jpg'));
 
 INSERT INTO Director
 	(_ID, _FName, _LName)
@@ -63,25 +64,25 @@ VALUES
 	(2,3),
 	(3,4),
 	(4,5),
-	(5,6);
+	(6,5);
 
 INSERT INTO Actors_per_Movie
 	(_Actor_ID,_Movie_ID)
 VALUES
 	(1,1),
 	(2,2),
-	(2,3),
-	(3,4),
-	(3,5),
-	(3,6),
-	(3,7),
-	(4,8),
-	(4,9),
-	(4,10),
-	(4,11),
-	(4,12),
-	(5,13),
-	(5,14);
+	(3,2),
+	(4,3),
+	(5,3),
+	(6,3),
+	(7,3),
+	(8,4),
+	(9,4),
+	(10,4),
+	(11,4),
+	(12,4),
+	(13,5),
+	(14,5);
 	
 INSERT INTO Genders_per_Movie
 	(_Gender_ID,_Movie_ID)
@@ -106,7 +107,7 @@ VALUES
 	(2,'Sala Garbo','Calle 28, San José'),
 	(3,'Nova Cinemas','Curridabat, San José'),
 	(4,'Cinépolis, Paseo Metrópoli','La Lima, Cartago'),
-	(5,'Cinemark, Multiplaza Curridabat','Curridabat, San José'),
+	(5,'Cinemark, Multiplaza Curridabat','Curridabat, San José');
 	
 INSERT INTO Auditorium
 	(_ID, _Name)
@@ -175,7 +176,7 @@ VALUES
 	(5,20),(5,21),(5,22),(5,23),(5,24),(5,25);
 	
 INSERT INTO Screening
-	(_ID,Cinema_ID,_Auditorium_ID,_Movie_ID,_Date,_Start_time)
+	(_ID,_Cinema_ID,_Auditorium_ID,_Movie_ID,_Date,_Start_time)
 VALUES
 	(1,1,1,2,'01/12/2018','13:00'),
 	(2,1,1,3,'01/12/2018','16:15'),
