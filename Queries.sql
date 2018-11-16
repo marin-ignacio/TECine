@@ -209,6 +209,38 @@ END $$
 
 LANGUAGE plpgsql;
 
+/*
+ --@AUTHOR Yenira Chacón
+ --@CREATE DATE 15/11/2018
+ --DESCRIPTION: Insertion in the table Movie
+*/
+DROP FUNCTION _insert_movie;
+CREATE FUNCTION _insert_movie(_pTitle VARCHAR(40), _pDuration VARCHAR(200),_pDescription VARCHAR(1000),_pImage varchar(100)) 
+RETURNS void AS $$
+
+BEGIN
+    		IF EXISTS(
+			SELECT Movie._Title
+			FROM Movie
+			WHERE _pTitle = Movie._Title
+			) THEN
+
+        RAISE NOTICE 'That name already exists';
+
+	ELSE
+																	 
+	DECLARE
+    	_countMovieID INT := COUNT(*) FROM Movie;
+		_tempID INT :=((_countMovieID) + 1);
+		
+	BEGIN	
+		INSERT INTO Movie(_ID, _Title,_Duration_min, _Description, _Image)
+		VALUES(_tempID, _pTitle, _pDuration, _pDescription, read_binary_file(_pImage));
+		END;
+		END IF;
+END $$
+
+LANGUAGE plpgsql;
 
 SELECT _insert_director3('James','Cameron');
 SELECT _insert_cinema('Hola','Alajuela');
