@@ -1,4 +1,3 @@
-
 INSERT INTO Administrator
 	(_ID, _Username, _Password)
 VALUES
@@ -8,13 +7,13 @@ VALUES
 	(4, 'dayannaqs', '1234');
 	
 INSERT INTO Movie
-	(_ID, _Title, _Duration_min, _Description, _Image)
+	(_ID, _Title, _Translation, _Duration_min, _Description, _Image)
 VALUES
-	(1,'Spirited Away','02:05:00','Perdida en el bosque, una niña de 10 años conoce animales, fantasmas y criaturas extrañas.', pg_read_binary_file('C:\SPIRITED_AWAY.jpg')),
-	(2,'Big Heroes','01:48:00','Cuando un giro inesperado de eventos los sumerge en el medio de un peligroso plan, un niño prodigio, su robot y sus amigos se convierten en héroes de alta tecnología en una misión para salvar su ciudad.',pg_read_binary_file('C:\BIG_HEROES.jpg')),
-	(3,'The Jungle Book','01:47:00','Después de ser rescatado por la pantera Bagheera en la selva, una manada de lobos cría al recién nacido Mowgli. La vida feliz y apacible de Mowgli junto a su familia adoptiva se rompe en mil pedazos cuando llega el peligroso tigre Shere Khan.',pg_read_binary_file('C:\THE_JUNGLE_BOOK.jpeg')),
-	(4,'The Guardians of the Galaxy: Vol 1','02:02:00','Un aventurero espacial se convierte en la presa de unos cazadores de tesoros después de que él roba el orbe de un villano traicionero, y cuando descubre su poder, él debe encontrar la forma de unir a unos rivales para salvar al universo.',pg_read_binary_file('C:\GUARDIANS_OF_THE_GALAXY.jpg')),
-	(5,'Christopher Robin','01:44:00','Christopher Robin ha crecido y, ahora que es adulto, ha olvidado a sus amigos de la infancia y ha perdido el rumbo. Winnie the Pooh y sus compañeros viajan a Londres para salvar a Christopher y ayudarle a reencontrar la alegría.',pg_read_binary_file('C:\CHRISTOPHER_ROBIN.jpg'));
+	(1,'Spirited Away','El viaje de Chihiro','02:05:00','Perdida en el bosque, una niña de 10 años conoce animales, fantasmas y criaturas extrañas.', pg_read_binary_file('C:\SPIRITED_AWAY.jpg')),
+	(2,'Big Heroes','Grandes Héroes','01:48:00','Cuando un giro inesperado de eventos los sumerge en el medio de un peligroso plan, un niño prodigio, su robot y sus amigos se convierten en héroes de alta tecnología en una misión para salvar su ciudad.',pg_read_binary_file('C:\BIG_HEROES.jpg')),
+	(3,'The Jungle Book','El Libro de la Selva','01:47:00','Después de ser rescatado por la pantera Bagheera en la selva, una manada de lobos cría al recién nacido Mowgli. La vida feliz y apacible de Mowgli junto a su familia adoptiva se rompe en mil pedazos cuando llega el peligroso tigre Shere Khan.',pg_read_binary_file('C:\THE_JUNGLE_BOOK.jpeg')),
+	(4,'The Guardians of the Galaxy: Vol 1','Guardianes de la Galaxia: Vol 1','02:02:00','Un aventurero espacial se convierte en la presa de unos cazadores de tesoros después de que él roba el orbe de un villano traicionero, y cuando descubre su poder, él debe encontrar la forma de unir a unos rivales para salvar al universo.',pg_read_binary_file('C:\GUARDIANS_OF_THE_GALAXY.jpg')),
+	(5,'Christopher Robin','Christopher Robin','01:44:00','Christopher Robin ha crecido y, ahora que es adulto, ha olvidado a sus amigos de la infancia y ha perdido el rumbo. Winnie the Pooh y sus compañeros viajan a Londres para salvar a Christopher y ayudarle a reencontrar la alegría.',pg_read_binary_file('C:\CHRISTOPHER_ROBIN.jpg'));
 
 INSERT INTO Director
 	(_ID, _FName, _LName)
@@ -243,3 +242,21 @@ VALUES
 	(63,5,1,2,'30/11/2018','21:05'),
 	(64,5,4,3,'30/11/2018','15:35'),
 	(65,5,2,4,'30/11/2018','17:50');
+	
+INSERT INTO Reservation
+	(_ID,_Screening_ID,_Active)
+VALUES
+	(1,1,true),
+	(2,12,false),
+	(3,15,true),
+	(4,50,true),
+	(5,43,true),
+	(6,12,false),
+	(7,2,false),
+	(8,5,true),
+	(9,10,false),
+	(10,10,true);
+	
+	
+	
+	
