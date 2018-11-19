@@ -1,3 +1,4 @@
+														 
 SELECT * 
 FROM Screening;
 
@@ -214,7 +215,7 @@ LANGUAGE plpgsql;
  --@CREATE DATE 15/11/2018
  --DESCRIPTION: Insertion in the table Movie
 */
-DROP FUNCTION _insert_movie;
+
 CREATE FUNCTION _insert_movie(_pTitle VARCHAR(40), _pDuration VARCHAR(200),_pDescription VARCHAR(1000),_pImage varchar(100)) 
 RETURNS void AS $$
 
@@ -242,7 +243,3 @@ END $$
 
 LANGUAGE plpgsql;
 
-SELECT _insert_director3('James','Cameron');
-SELECT _insert_cinema('Hola','Alajuela');
-SELECT _insert_gender('Misterio');
-SELECT _insert_auditorium('Sala 10');
