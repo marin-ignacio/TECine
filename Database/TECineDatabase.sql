@@ -1,16 +1,3 @@
--- Database: TECine
-
--- DROP DATABASE "TECine";
-
-CREATE DATABASE "TECine"
-    WITH 
-    OWNER = postgres
-    ENCODING = 'UTF8'
-    LC_COLLATE = 'Spanish_Spain.1252'
-    LC_CTYPE = 'Spanish_Spain.1252'
-    TABLESPACE = pg_default
-    CONNECTION LIMIT = -1;
-	
 CREATE TABLE Administrator(		
 	_ID				INT				NOT NULL,
 	_Username		VARCHAR(20)		NOT NULL,
@@ -41,8 +28,9 @@ CREATE TABLE Gender(
 CREATE TABLE Movie(
 	_ID 			INT 			NOT NULL,
 	_Title 			VARCHAR(40) 	NOT NULL,
-	_Duration_min 	INTERVAL 			NOT NULL,
-	_Description	VARCHAR(500) 	NOT NULL,
+	_Translation	VARCHAR(40)		NOT NULL,
+	_Duration_min 	INT 			NOT NULL,
+	_Description	VARCHAR(1000) 	NOT NULL,
 	_Image			BYTEA			NOT NULL,
 
 	PRIMARY KEY(_ID)
@@ -144,5 +132,3 @@ ALTER TABLE Reservation ADD FOREIGN KEY(_Screening_ID) REFERENCES Screening(_ID)
 
 ALTER TABLE Seats_Reserved ADD FOREIGN KEY(_Reservation_ID) REFERENCES Reservation(_ID);
 ALTER TABLE Seats_Reserved ADD FOREIGN KEY(_Seat_ID) REFERENCES Seat(_ID);
-
-
