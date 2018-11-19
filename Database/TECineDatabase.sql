@@ -29,7 +29,7 @@ CREATE TABLE Movie(
 	_ID 			INT 			NOT NULL,
 	_Title 			VARCHAR(40) 	NOT NULL,
 	_Translation	VARCHAR(40)		NOT NULL,
-	_Duration_min 	INT 			NOT NULL,
+	_Duration_min 	INTERVAL		NOT NULL,
 	_Description	VARCHAR(1000) 	NOT NULL,
 	_Image			BYTEA			NOT NULL,
 
