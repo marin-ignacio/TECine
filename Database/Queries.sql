@@ -49,7 +49,7 @@ FROM Seats_Reserved;
  --DESCRIPTION: Insertion in the table Director
 */
 
-CREATE FUNCTION _insert_director3(_pName VARCHAR(40), _pLName VARCHAR(200)) RETURNS INT AS $$
+CREATE FUNCTION _insert_director(_pName VARCHAR(40), _pLName VARCHAR(200)) RETURNS INT AS $$
 
 BEGIN
     		IF EXISTS(
