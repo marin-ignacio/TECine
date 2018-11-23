@@ -7,15 +7,15 @@ CREATE TABLE Administrator(
 
 CREATE TABLE Director(
 	_ID 		INT 			NOT NULL,
-	_FName 		VARCHAR(40) 	NOT NULL,
-	_LName		VARCHAR(200) 	NOT NULL,
+	_Fname 		VARCHAR(40) 	NOT NULL,
+	_Lname		VARCHAR(200) 	NOT NULL,
 	PRIMARY KEY(_ID)
 ) ;
 
 CREATE TABLE Actor(
 	_ID 		INT 			NOT NULL,
-	_FName		VARCHAR(40) 	NOT NULL,
-	_LName		VARCHAR(200)	NOT NULL,
+	_Fname		VARCHAR(40) 	NOT NULL,
+	_Lname		VARCHAR(200)	NOT NULL,
 	PRIMARY KEY(_ID)
 ) ;
 				
@@ -32,7 +32,6 @@ CREATE TABLE Movie(
 	_Duration_min 	INTERVAL		NOT NULL,
 	_Description	VARCHAR(1000) 	NOT NULL,
 	_Image			BYTEA			NOT NULL,
-
 	PRIMARY KEY(_ID)
 ) ;
 
