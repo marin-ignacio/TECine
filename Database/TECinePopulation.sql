@@ -256,7 +256,14 @@ VALUES
 	(8,5,true),
 	(9,10,false),
 	(10,10,true);
-	
+
+INSERT INTO Seats_Reserved(_Reservation_ID,_Seat_ID)
+VALUES
+	(1,2),
+	(1,3),
+	(1,4),
+	(1,5),
+	(1,6);
 	
 	
 	
