@@ -49,18 +49,18 @@ FROM Seats_Reserved;
  --DESCRIPTION: Insertion in the table Director
 */
 
-CREATE FUNCTION _insert_director3(_pName VARCHAR(40), _pLName VARCHAR(200)) RETURNS INT AS $$
+CREATE FUNCTION _insert_director(_pFname VARCHAR(40), _pLname VARCHAR(200)) RETURNS INT AS $$
 
 BEGIN
     		IF ( (EXISTS(
-			SELECT Director._FName
+			SELECT Director._Fname
 			FROM Director
-			WHERE _pName = Director._FName
+			WHERE _pFname = Director._Fname
 			)) AND 
 			(EXISTS(
-			SELECT Director._LName
+			SELECT Director._Lname
 			FROM Director
-			WHERE _pLName = Director._LName
+			WHERE _pLname = Director._Lname
 			)) )THEN
 
         RETURN -1;
@@ -72,8 +72,8 @@ BEGIN
 		_tempID INT :=((_countDirID) + 1);
 		
 	BEGIN
-		INSERT INTO Director(_ID, _FName, _LName)
-		VALUES(_tempID, _pName, _pLName);
+		INSERT INTO Director(_ID, _Fname, _Lname)
+		VALUES(_tempID, _pFname, _pLname);
 		RETURN _tempID;
 		END;
 		END IF;
@@ -184,18 +184,18 @@ LANGUAGE plpgsql;
  --@CREATE DATE 15/11/2018
  --DESCRIPTION: Insertion in the table Actor
 */
-CREATE FUNCTION _insert_actor3(_pName VARCHAR(40), _pLName VARCHAR(200)) RETURNS INT AS $$
+CREATE FUNCTION _insert_actor(_pFname VARCHAR(40), _pLname VARCHAR(200)) RETURNS INT AS $$
 
 BEGIN
     		IF ( (EXISTS(
-			SELECT Actor._FName
+			SELECT Actor._Fname
 			FROM Actor
-			WHERE _pName = Actor._FName
+			WHERE _pFname = Actor._Fname
 			)) AND 
 			(EXISTS(
-			SELECT Actor._LName
+			SELECT Actor._Lname
 			FROM Actor
-			WHERE _pLName = Actor._LName
+			WHERE _pLname = Actor._Lname
 			)) )THEN
 
         RETURN -1;
@@ -207,8 +207,8 @@ BEGIN
 		_tempID INT :=((_countActorID) + 1);
 		
 	BEGIN
-		INSERT INTO Actor(_ID, _FName, _LName)
-		VALUES(_tempID, _pName, _pLName);
+		INSERT INTO Actor(_ID, _Fname, _Lname)
+		VALUES(_tempID, _pFname, _pLname);
 		RETURN _tempID;
 		END;
 		END IF;
@@ -288,7 +288,7 @@ DECLARE
 		_directors_movies_ RECORD;
 BEGIN
 		FOR _directors_movies_ IN
-		SELECT Director._FName, Director._LName
+		SELECT Director._ID, Director._Fname, Director._Lname
 		FROM Directors_per_Movie
 				INNER JOIN Director ON Directors_per_movie._Director_ID = Director._ID
 			WHERE Directors_per_Movie._Movie_ID = _pMovie_ID
@@ -312,7 +312,7 @@ DECLARE
 		_actors_movies_ RECORD;
 BEGIN
 		FOR _actors_movies_ IN
-		SELECT Actor._FName, Actor._LName
+		SELECT Actor._ID, Actor._Fname, Actor._Lname
 		FROM Actors_per_Movie
 				INNER JOIN Actor ON Actors_per_movie._Actor_ID = Actor._ID
 			WHERE Actors_per_Movie._Movie_ID = _pMovie_ID
@@ -336,7 +336,7 @@ DECLARE
 		_genders_movies_ RECORD;
 BEGIN
 		FOR _genders_movies_ IN
-		SELECT Gender._Name
+		SELECT Gender._ID, Gender._Name
 		FROM Genders_per_Movie
 				INNER JOIN Gender ON Genders_per_movie._Gender_ID = Gender._ID
 			WHERE Genders_per_Movie._Movie_ID = _pMovie_ID
@@ -389,7 +389,7 @@ SELECT * FROM _movies_actors(3) AS (Actor_Name VARCHAR(40),Actor_Last_Name VARCH
 SELECT * FROM _movies_genders(3) AS (Actor_Name VARCHAR(40));
 SELECT * FROM _movies_reservations(2,1,'01/12/2018','13:00') AS (Seat_Row CHAR, Seat_Number INT);
 
-SELECT _insert_director3('Nacho','Guapo:3');
+SELECT _insert_director('Nacho','Guapo:3');
 SELECT _insert_cinema('Hola','Alajuela');
 SELECT _insert_gender('Misterio');
 SELECT _insert_auditorium('Sala 10');
