@@ -8,14 +8,14 @@ CREATE TABLE Administrator(
 CREATE TABLE Director(
 	_ID 		INT 			NOT NULL,
 	_Fname 		VARCHAR(40) 	NOT NULL,
-	_Lname		VARCHAR(200) 	NOT NULL,
+	_Lname		VARCHAR(40) 	NOT NULL,
 	PRIMARY KEY(_ID)
 ) ;
 
 CREATE TABLE Actor(
 	_ID 		INT 			NOT NULL,
 	_Fname		VARCHAR(40) 	NOT NULL,
-	_Lname		VARCHAR(200)	NOT NULL,
+	_Lname		VARCHAR(40)	NOT NULL,
 	PRIMARY KEY(_ID)
 ) ;
 				
