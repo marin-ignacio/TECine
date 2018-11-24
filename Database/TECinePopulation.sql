@@ -16,7 +16,7 @@ VALUES
 	(5,'Christopher Robin','Christopher Robin','01:44:00','Christopher Robin ha crecido y, ahora que es adulto, ha olvidado a sus amigos de la infancia y ha perdido el rumbo. Winnie the Pooh y sus compañeros viajan a Londres para salvar a Christopher y ayudarle a reencontrar la alegría.',pg_read_binary_file('C:\CHRISTOPHER_ROBIN.jpg'));
 
 INSERT INTO Director
-	(_ID, _FName, _LName)
+	(_ID, _Fname, _Lname)
 VALUES
 	(1, 'Miyazaki','Hayao'),
 	(2, 'Don','Hall'),
@@ -26,7 +26,7 @@ VALUES
 	(6,'Marc','Forster');
 	
 INSERT INTO Actor
-	(_ID,_FName,_LName)
+	(_ID,_Fname,_Lname)
 VALUES
 	(1,'Hiragi','Rumi'),
 	(2,'Ryan','Potter'),
