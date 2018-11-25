@@ -1,45 +1,60 @@
+---Selects Screening table
 SELECT * 
 FROM Screening;
 
+---Selects every Movie's table
 SELECT *
 FROM Movie;
 
+---Selects Actor's table
 SELECT *
 FROM Actor;
 
+---Selects every actors per movie
 SELECT *
 FROM Actors_per_Movie;
 
+---Selects Auditorium's table
 SELECT *
 FROM Auditorium;
 
+---Selects Cinema's table
 SELECT *
 FROM Cinema;
 
+---Selects Auditorium's per cinema
 SELECT *
 FROM Auditoriums_per_Cinema;
 
+---Selects every Director
 SELECT *
 FROM Director;
 
+---Selects every director per movie
 SELECT *
 FROM Directors_per_Movie;
 
+---Selects every gender
 SELECT *
 FROM Gender;
 
+---Selects every gender per movie
 SELECT *
 FROM Genders_per_Movie;
 
+---Selects Reservation's table
 SELECT *
 FROM Reservation;
 
+---Selects Seat table
 SELECT *
 FROM Seat;
 
+---Select Seats per auditorium
 SELECT *
 FROM Seats_per_Auditorium;
 
+---Selects the seats that are reserved
 SELECT *
 FROM Seats_Reserved;
 
