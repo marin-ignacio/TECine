@@ -30,8 +30,8 @@ CREATE TABLE Movie(
 	_Title 			VARCHAR(40) 	NOT NULL,
 	_Translation	VARCHAR(40)		NOT NULL,
 	_Duration_min 	INTERVAL		NOT NULL,
-	_Description	VARCHAR(1000) 	NOT NULL,
-	_Image		VARCHAR(10485760)			NOT NULL,
+	_Description	VARCHAR(700) 	NOT NULL,
+	_Image			BYTEA			NOT NULL,
 	PRIMARY KEY(_ID)
 ) ;
 
@@ -90,7 +90,7 @@ CREATE TABLE Screening(
 	_Cinema_ID 		INT 	NOT NULL,
 	_Auditorium_ID 	INT 	NOT NULL,
 	_Movie_ID 		INT 	NOT NULL,
-	_Date 			DATE 	NOT NULL,
+	_Date 			VARCHAR(15) 	NOT NULL,
 	_Start_time 	TIME 	NOT NULL,
 	PRIMARY KEY(_ID)
 ) ;
