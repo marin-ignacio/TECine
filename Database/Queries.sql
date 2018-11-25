@@ -60,7 +60,6 @@ FROM Seats_Reserved;
 
 
 -----******************************************************************************-----
-
 /*
  --@AUTHOR Yenira Chacón
  --@CREATE DATE 15/11/2018
@@ -274,7 +273,6 @@ LANGUAGE plpgsql;
  --@CREATE DATE 15/11/2018
  --DESCRIPTION: Insertion in the Reservation table
 */		
-DROP FUNCTION _insert_reservation;
 CREATE FUNCTION _insert_reservation(_pScreening INT, _pActive BOOL) RETURNS INT AS $$
 
 BEGIN
@@ -301,29 +299,98 @@ BEGIN
 END $$
 
 LANGUAGE plpgsql;
+
+
+	
+/*
+ --@AUTHOR Yenira Chacón
+ --@CREATE DATE 15/11/2018
+ --DESCRIPTION: Insertion in the Reservation table
+*/		
+CREATE FUNCTION _generate_seats() RETURNS INT AS $$
+
+BEGIN
+		IF NOT EXISTS(			---If movie's title exists, doesn't insert
+			SELECT Screening._ID
+			FROM Screening
+			WHERE _pScreening = Screening._ID
+			) THEN
+
+        RETURN -1;
+
+	ELSE
 				
+	DECLARE
+    	_countReservationID INT := COUNT(*) FROM Reservation; 		---Increases Reservation's ID
+		_tempID INT :=((_countReservationID) + 1);
+		
+	BEGIN
+		INSERT INTO Reservation(_ID, _Screening_ID, _Active)			---Inserts into table
+		VALUES(_tempID, _pScreening, _pActive);
+		RETURN _tempID;
+		END;
+		END IF;
+END $$
+
+LANGUAGE plpgsql;				  
 -----******************************************************************************-----
 																			 
 /*
  --@AUTHOR Yenira Chacón
  --@CREATE DATE 21/11/2018
- --DESCRIPTION: Inner Join Movie, Cinema, Movie transalation, Date, Hour
+ --DESCRIPTION: Inner Join Movies per Date per Cinema
 */
-CREATE FUNCTION _movies_dates_times(_pCinema_ID INT) 
-RETURNS TABLE (_screening_date DATE,_screening_hour TIME)
+CREATE OR REPLACE FUNCTION _movies_dates_times(_pCinema_ID INT, _pDate DATE) 
+RETURNS TABLE (_pID INT, _pTitle VARCHAR(40), _pTranslation VARCHAR(40), _pDuration_min INTERVAL, _pDescription VARCHAR(1000), _pImage BYTEA)
 AS $$
 																			 
 DECLARE
 		_my_table_ RECORD;
 BEGIN
 		FOR _my_table_ IN
-		SELECT Screening._Date, Screening._Start_time
+		SELECT Movie._ID,Movie._Title,Movie._Translation,Movie._Duration_min, Movie._Description, Movie._Image
 		FROM Screening
 				INNER JOIN Movie ON Screening._Movie_ID= Movie._ID
-		WHERE Screening._Cinema_ID = _pCinema_ID
+		WHERE Screening._Cinema_ID = _pCinema_ID AND Screening._Date = _pDate
 LOOP
-					_screening_date:= _my_table_._Date;
-					_screening_hour:= _my_table_._Start_time;
+					_pID:= _my_table_._ID;
+					_pTitle:= _my_table_._Title;
+					_pTranslation:= _my_table_._Translation;
+					_pDuration_min:= _my_table_._Duration_min;
+					_pDescription:= _my_table_._Description;
+					_pImage:= _my_table_._Image;
+RETURN NEXT;
+END LOOP;
+RETURN;
+END $$
+LANGUAGE plpgsql;
+																 
+																  
+/*
+ --@AUTHOR Yenira Chacón
+ --@CREATE DATE 21/11/2018
+ --DESCRIPTION: Inner Join Movies per Date per Cinema
+*/
+CREATE OR REPLACE FUNCTION _movies_per_date(_pCinema_ID INT, _pMovie_ID INT, _pDate DATE) 
+RETURNS TABLE (_pID INT, _pTitle VARCHAR(40), _pTranslation VARCHAR(40), _pDuration_min INTERVAL, _pDescription VARCHAR(1000), _pImage BYTEA, _pHour TIME)
+AS $$
+																			 
+DECLARE
+		_my_table_ RECORD;
+BEGIN
+		FOR _my_table_ IN
+		SELECT Movie._ID,Movie._Title,Movie._Translation,Movie._Duration_min, Movie._Description, Movie._Image, Screening._Start_time
+		FROM Screening
+				INNER JOIN Movie ON Screening._Movie_ID= Movie._ID
+		WHERE Screening._Cinema_ID = _pCinema_ID AND Screening._Date = _pDate AND Screening._Movie_ID = _pMovie_ID
+LOOP
+					_pID:= _my_table_._ID;
+					_pTitle:= _my_table_._Title;
+					_pTranslation:= _my_table_._Translation;
+					_pDuration_min:= _my_table_._Duration_min;
+					_pDescription:= _my_table_._Description;
+					_pImage:= _my_table_._Image;
+					_pHour:= _my_table_._Start_time;
 RETURN NEXT;
 END LOOP;
 RETURN;
@@ -452,11 +519,12 @@ SELECT * FROM _movies_directors(3);
 SELECT * FROM _movies_actors(3);
 SELECT * FROM _movies_genders(3);
 SELECT * FROM _movies_reservations(2,1,'01/12/2018','13:00');														
-SELECT * FROM _movies_dates_times(1);
-
+SELECT * FROM _movies_dates_times(1,'01/12/2018');
+SELECT * FROM _movies_per_date(1,3,'01/12/2018');
+						
 SELECT _insert_cinema('Hola','Alajuela');
 SELECT _insert_gender('Misterio');
 SELECT _insert_auditorium('Sala 10');
 SELECT _insert_reservation(16,true);
 
------******************************************************************************-----
+																 
