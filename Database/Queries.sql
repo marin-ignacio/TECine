@@ -60,6 +60,7 @@ FROM Seats_Reserved;
 
 
 -----******************************************************************************-----
+
 /*
  --@AUTHOR Yenira Chacón
  --@CREATE DATE 15/11/2018
@@ -299,40 +300,31 @@ BEGIN
 END $$
 
 LANGUAGE plpgsql;
-
-
-	
+																  
 /*
  --@AUTHOR Yenira Chacón
- --@CREATE DATE 15/11/2018
- --DESCRIPTION: Insertion in the Reservation table
-*/		
-CREATE FUNCTION _generate_seats() RETURNS INT AS $$
-
+ --@CREATE DATE 21/11/2018
+ --DESCRIPTION: Generate seats function
+*/
+																  
+CREATE OR REPLACE FUNCTION generate_seats (_pAuditorium_ID INT) 
+ RETURNS void AS $$ 
+DECLARE
+   _counter INTEGER := 0 ; 
 BEGIN
-		IF NOT EXISTS(			---If movie's title exists, doesn't insert
-			SELECT Screening._ID
-			FROM Screening
-			WHERE _pScreening = Screening._ID
-			) THEN
-
-        RETURN -1;
-
-	ELSE
-				
-	DECLARE
-    	_countReservationID INT := COUNT(*) FROM Reservation; 		---Increases Reservation's ID
-		_tempID INT :=((_countReservationID) + 1);
-		
-	BEGIN
-		INSERT INTO Reservation(_ID, _Screening_ID, _Active)			---Inserts into table
-		VALUES(_tempID, _pScreening, _pActive);
-		RETURN _tempID;
-		END;
-		END IF;
+ 
+ 
+ WHILE _counter <= 24 LOOP
+ _counter := _counter + 1; 
+ INSERT INTO Seats_per_Auditorium
+	(_Auditorium_ID, _Seat_ID)
+VALUES
+	(_pAuditorium_ID, _counter);	
+ END LOOP ; 
+ RETURN;
 END $$
-
-LANGUAGE plpgsql;				  
+LANGUAGE plpgsql;									
+																  
 -----******************************************************************************-----
 																			 
 /*
@@ -521,10 +513,20 @@ SELECT * FROM _movies_genders(3);
 SELECT * FROM _movies_reservations(2,1,'01/12/2018','13:00');														
 SELECT * FROM _movies_dates_times(1,'01/12/2018');
 SELECT * FROM _movies_per_date(1,3,'01/12/2018');
+SELECT * FROM generate_seats(6);
 						
 SELECT _insert_cinema('Hola','Alajuela');
 SELECT _insert_gender('Misterio');
 SELECT _insert_auditorium('Sala 10');
 SELECT _insert_reservation(16,true);
-
+								  
+INSERT INTO Auditorium
+	(_ID, _Name)
+VALUES
+	(6,'Sala 6');
+								  
+INSERT INTO Auditoriums_per_Cinema
+	(_Cinema_ID, _Auditorium_ID)
+VALUES
+	(1,6);
 																 
