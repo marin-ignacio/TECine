@@ -62,6 +62,57 @@ FROM Seats_Reserved;
 -----******************************************************************************-----
 
 
+SELECT * 
+FROM Screening;
+
+SELECT *
+FROM Movie;
+
+SELECT *
+FROM Actor;
+
+SELECT *
+FROM Actors_per_Movie;
+
+SELECT *
+FROM Auditorium;
+
+SELECT *
+FROM Cinema;
+
+SELECT *
+FROM Auditoriums_per_Cinema;
+
+SELECT *
+FROM Director;
+
+SELECT *
+FROM Directors_per_Movie;
+
+SELECT *
+FROM Gender;
+---Selects every gender per movie
+SELECT *
+FROM Genders_per_Movie;
+
+---Selects Reservation's table
+SELECT *
+FROM Reservation;
+
+---Selects Seat table
+SELECT *
+FROM Seat;
+
+---Select Seats per auditorium
+SELECT *
+FROM Seats_per_Auditorium;
+
+---Selects the seats that are reserved
+SELECT *
+FROM Seats_Reserved;
+
+-----******************************************************************************-----
+
 /*
  --@AUTHOR Yenira Chacón
  --@CREATE DATE 15/11/2018
@@ -562,8 +613,8 @@ LANGUAGE plpgsql;
 																			 
  --@AUTHOR Yenira Chacón
  --@CREATE DATE 21/11/2018
- --DESCRIPTION: Inner Join Movie, genders
-*/
+ --DESCRIPTION: Inner Join Movie, reservations
+
 CREATE FUNCTION _movies_reservations(_pMovie_ID INT, _pCinemaID INT, _pDate DATE, _pHour TIME) 
 RETURNS TABLE (Seat_Row CHAR, Seat_Number INT)
 AS $$
@@ -587,4 +638,32 @@ RETURN;
 END $$
 LANGUAGE plpgsql;
 
+ --@AUTHOR Yenira Chacón
+ --@CREATE DATE 21/11/2018
+ --DESCRIPTION: Inner Join Seats with name and row per 
+								  
+CREATE FUNCTION _auditorium_seats(_pCinema_ID INT, _pAuditorium_ID INT) 
+RETURNS TABLE (_pSeat_ID INT,_pRow CHAR, _pNumber INT)
+AS $$
+																			 
+DECLARE
+		_seats_ RECORD;
+BEGIN
+		FOR _seats_ IN
+		SELECT Seat._ID, Seat._Row, Seat._Number
+		FROM Seats_per_Auditorium
+				INNER JOIN Seat ON Seats_per_Auditorium._Seat_ID = Seat._ID
+				INNER JOIN Auditoriums_per_Cinema ON Seats_per_Auditorium._Auditorium_ID = Auditoriums_per_Cinema._Auditorium_ID
+			WHERE Auditoriums_per_Cinema._Cinema_ID = _pCinema_ID AND Auditoriums_per_Cinema._Auditorium_ID = _pAuditorium_ID
+LOOP
+				_pSeat_ID := _seats_._ID;
+				_pRow := _seats_._Row;
+				_pNumber := _seats_._Number;
+RETURN NEXT;
+END LOOP;
+RETURN;
+END $$
+LANGUAGE plpgsql;
 -----******************************************************************************-----
+								  
+
