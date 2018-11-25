@@ -31,7 +31,7 @@ CREATE TABLE Movie(
 	_Translation	VARCHAR(40)		NOT NULL,
 	_Duration_min 	INTERVAL		NOT NULL,
 	_Description	VARCHAR(1000) 	NOT NULL,
-	_Image			BYTEA			NOT NULL,
+	_Image		VARCHAR(10485760)			NOT NULL,
 	PRIMARY KEY(_ID)
 ) ;
 
