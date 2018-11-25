@@ -61,6 +61,7 @@ FROM Seats_Reserved;
 
 -----******************************************************************************-----
 
+
 /*
  --@AUTHOR Yenira Chacón
  --@CREATE DATE 15/11/2018
@@ -324,7 +325,96 @@ VALUES
  RETURN;
 END $$
 LANGUAGE plpgsql;									
-																  
+
+/*
+ --@AUTHOR Yenira Chacón
+ --@CREATE DATE 21/11/2018
+ --DESCRIPTION: Inserts genders per movie
+*/
+
+CREATE OR REPLACE FUNCTION _insert_genders_per_movie(_pGenderID INT, _pMovieID INT) RETURNS INT AS $$
+
+BEGIN
+    		IF (EXISTS(       ---If the ID exist, do not insert
+			SELECT Genders_per_Movie._Movie_ID,Genders_per_Movie._Gender_ID
+			FROM Genders_per_Movie
+			WHERE _pMovieID = _Movie_ID AND _pGenderID = _Gender_ID
+			) )THEN
+
+        RETURN -1;
+																	 
+	ELSE
+		
+	BEGIN
+		INSERT INTO Genders_per_Movie(_Gender_ID, _Movie_ID)  --- Inserts gender with movie if it's different from the existing directors
+		VALUES( _pGenderID, _pMovieID);
+		RETURN _pGenderID;
+		END;
+		END IF;
+		
+END $$
+LANGUAGE plpgsql;
+				  
+/*
+ --@AUTHOR Yenira Chacón
+ --@CREATE DATE 21/11/2018
+ --DESCRIPTION: insert actors per movie
+*/
+
+CREATE OR REPLACE FUNCTION _insert_actors_per_movie(_pActorID INT, _pMovieID INT) RETURNS INT AS $$
+
+BEGIN
+    		IF (EXISTS(       ---If the ID exist, do not insert
+			SELECT Actors_per_Movie._Movie_ID,Actors_per_Movie._Actor_ID
+			FROM Actors_per_Movie
+			WHERE _pMovieID = _Movie_ID AND _pActorID = _Actor_ID
+			) )THEN
+
+        RETURN -1;
+																	 
+	ELSE
+		
+	BEGIN
+		INSERT INTO Actors_per_Movie(_Actor_ID, _Movie_ID)  --- Inserts actor with movie if it's different from the existing directors
+		VALUES( _pActorID, _pMovieID);
+		RETURN _pActorID;
+		END;
+		END IF;
+		
+END $$
+LANGUAGE plpgsql;
+
+
+/*
+ --@AUTHOR Yenira Chacón
+ --@CREATE DATE 21/11/2018
+ --DESCRIPTION: inserts director per movie
+*/
+
+CREATE OR REPLACE FUNCTION _insert_directors_per_movie(_pDirectorID INT, _pMovieID INT) RETURNS INT AS $$
+
+BEGIN
+    		IF (EXISTS(       ---If the ID exist, do not insert
+			SELECT Directors_per_Movie._Movie_ID,Directors_per_Movie._Director_ID
+			FROM Directors_per_Movie
+			WHERE _pMovieID = _Movie_ID AND _pDirectorID = _Director_ID
+			) )THEN
+
+        RETURN -1;
+																	 
+	ELSE
+		
+	BEGIN
+		INSERT INTO Directors_per_Movie(_Director_ID, _Movie_ID)  --- Inserts director with movie if it's different from the existing directors
+		VALUES( _pDirectorID, _pMovieID);
+		RETURN _pDirectorID;
+		END;
+		END IF;
+		
+END $$
+LANGUAGE plpgsql;
+
+
 -----******************************************************************************-----
 																			 
 /*
@@ -498,35 +588,3 @@ END $$
 LANGUAGE plpgsql;
 
 -----******************************************************************************-----
-								  
-DROP FUNCTION _movies_dates_times;
-DROP FUNCTION _movies_directors;
-DROP FUNCTION _movies_actors;
-DROP FUNCTION _movies_genders;
-DROP FUNCTION _movies_reservations;
-DROP FUNCTION _insert_director;
-DROP FUNCTION _insert_actor;
-																			 
-SELECT * FROM _movies_directors(3);
-SELECT * FROM _movies_actors(3);
-SELECT * FROM _movies_genders(3);
-SELECT * FROM _movies_reservations(2,1,'01/12/2018','13:00');														
-SELECT * FROM _movies_dates_times(1,'01/12/2018');
-SELECT * FROM _movies_per_date(1,3,'01/12/2018');
-SELECT * FROM generate_seats(6);
-						
-SELECT _insert_cinema('Hola','Alajuela');
-SELECT _insert_gender('Misterio');
-SELECT _insert_auditorium('Sala 10');
-SELECT _insert_reservation(16,true);
-								  
-INSERT INTO Auditorium
-	(_ID, _Name)
-VALUES
-	(6,'Sala 6');
-								  
-INSERT INTO Auditoriums_per_Cinema
-	(_Cinema_ID, _Auditorium_ID)
-VALUES
-	(1,6);
-																 
