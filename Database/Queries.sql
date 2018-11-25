@@ -352,7 +352,35 @@ BEGIN
 END $$
 
 LANGUAGE plpgsql;
-																  
+/*
+ --@AUTHOR Yenira Chacón
+ --@CREATE DATE 15/11/2018
+ --DESCRIPTION: Insertion in the table Screening
+*/
+
+CREATE FUNCTION _insert_screening(_pCinemaID INT, _pAuditoriumID INT, _pMovieID INT,_pDate DATE, _pHour TIME) RETURNS INT AS $$
+
+BEGIN
+    		IF (EXISTS(       ---If the ID exist, do not insert
+			SELECT Screening._Cinema_ID,Screening._Auditorium_ID, Screening._Movie_ID, Screening._Date, Screening._Start_time
+			FROM Screening
+			WHERE _pCinemaID = _Cinema_ID AND _pAuditorium = _Auditorium_ID AND _pMovie = _Movie_ID AND _pDate = _Date AND _pHour = _Start_time
+			) )THEN
+
+        RETURN -1;
+																	 
+	ELSE
+		
+	BEGIN
+		INSERT INTO Screening(_ID,_Cinema_ID,_Auditorium_ID,_Movie_ID,_Date,_Start_time) --- Inserts Screening's ID with movie if it's different from the existing data in table
+		VALUES(_pCinemaID, _pAuditorium, _pMovie, _pDate, _pHour);
+		RETURN _pCinemaID;
+		END;
+		END IF;
+		
+END $$
+
+LANGUAGE plpgsql;																  
 /*
  --@AUTHOR Yenira Chacón
  --@CREATE DATE 21/11/2018
