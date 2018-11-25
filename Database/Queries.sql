@@ -273,7 +273,8 @@ LANGUAGE plpgsql;
  --DESCRIPTION: Inner Join Movie, Cinema, Movie transalation, Date, Hour
 */
 CREATE FUNCTION _movies_dates_times(_pCinema_ID INT) 
-RETURNS SETOF RECORD AS $$
+RETURNS TABLE (_screening_date DATE,_screening_hour TIME)
+AS $$
 																			 
 DECLARE
 		_my_table_ RECORD;
@@ -284,12 +285,14 @@ BEGIN
 				INNER JOIN Movie ON Screening._Movie_ID= Movie._ID
 		WHERE Screening._Cinema_ID = _pCinema_ID
 LOOP
-RETURN NEXT _my_table_;
+					_screening_date:= _my_table_._Date;
+					_screening_hour:= _my_table_._Start_time;
+RETURN NEXT;
 END LOOP;
 RETURN;
 END $$
-
 LANGUAGE plpgsql;
+																			
 				
 /*
  --@AUTHOR Yenira Chacón
@@ -297,22 +300,24 @@ LANGUAGE plpgsql;
  --DESCRIPTION: Inner Join Movie, directors
 */
 CREATE FUNCTION _movies_directors(_pMovie_ID INT) 
-RETURNS SETOF RECORD AS $$
+RETURNS TABLE (Director_Name VARCHAR(40),Director_Last_Name VARCHAR(200))
+AS $$
 																			 
 DECLARE
 		_directors_movies_ RECORD;
 BEGIN
 		FOR _directors_movies_ IN
-		SELECT Director._ID, Director._Fname, Director._Lname
+		SELECT Director._FName, Director._LName
 		FROM Directors_per_Movie
 				INNER JOIN Director ON Directors_per_movie._Director_ID = Director._ID
 			WHERE Directors_per_Movie._Movie_ID = _pMovie_ID
 LOOP
-RETURN NEXT _directors_movies_;
+				Director_Name := _directors_movies_._FName;
+				Director_Last_Name := _directors_movies_._LName;
+RETURN NEXT;
 END LOOP;
 RETURN;
 END $$
-
 LANGUAGE plpgsql;
 																			 
 /*
@@ -321,22 +326,24 @@ LANGUAGE plpgsql;
  --DESCRIPTION: Inner Join Movie, actors
 */
 CREATE FUNCTION _movies_actors(_pMovie_ID INT) 
-RETURNS SETOF RECORD AS $$
+RETURNS TABLE (Actor_Name VARCHAR(40),Actor_Last_Name VARCHAR(200))
+AS $$
 																			 
 DECLARE
 		_actors_movies_ RECORD;
 BEGIN
 		FOR _actors_movies_ IN
-		SELECT Actor._ID, Actor._Fname, Actor._Lname
+		SELECT Actor._FName, Actor._LName
 		FROM Actors_per_Movie
 				INNER JOIN Actor ON Actors_per_movie._Actor_ID = Actor._ID
 			WHERE Actors_per_Movie._Movie_ID = _pMovie_ID
 LOOP
-RETURN NEXT _actors_movies_;
+			Actor_Name := _actors_movies_._FName;
+			Actor_Last_Name := _actors_movies_._LName;
+RETURN NEXT;
 END LOOP;
 RETURN;
 END $$
-
 LANGUAGE plpgsql;
 
 																			 /*
@@ -345,22 +352,23 @@ LANGUAGE plpgsql;
  --DESCRIPTION: Inner Join Movie, genders
 */
 CREATE FUNCTION _movies_genders(_pMovie_ID INT) 
-RETURNS SETOF RECORD AS $$
+RETURNS TABLE (Actor_Name VARCHAR(40))
+AS $$
 																			 
 DECLARE
 		_genders_movies_ RECORD;
 BEGIN
 		FOR _genders_movies_ IN
-		SELECT Gender._ID, Gender._Name
+		SELECT Gender._Name
 		FROM Genders_per_Movie
 				INNER JOIN Gender ON Genders_per_movie._Gender_ID = Gender._ID
 			WHERE Genders_per_Movie._Movie_ID = _pMovie_ID
 LOOP
-RETURN NEXT _genders_movies_;
+				Actor_Name := _genders_movies_._Name;
+RETURN NEXT;
 END LOOP;
 RETURN;
 END $$
-
 LANGUAGE plpgsql;
 																			 
 															
@@ -370,7 +378,8 @@ LANGUAGE plpgsql;
  --DESCRIPTION: Inner Join Movie, genders
 */
 CREATE FUNCTION _movies_reservations(_pMovie_ID INT, _pCinemaID INT, _pDate DATE, _pHour TIME) 
-RETURNS SETOF RECORD AS $$
+RETURNS TABLE (Seat_Row CHAR, Seat_Number INT)
+AS $$
 																			 
 DECLARE
 		_reservations_movies_ RECORD;
@@ -383,28 +392,30 @@ BEGIN
 				INNER JOIN Screening ON Reservation._Screening_ID = Screening._ID
 		WHERE _Active = TRUE AND _Movie_ID = _pMovie_ID AND _Cinema_ID = _pCinemaID AND _Date = _pDate AND _Start_time = _pHour
 LOOP
-RETURN NEXT _reservations_movies_;
+				Seat_Row := _reservations_movies_._Row;
+				Seat_Number	:= _reservations_movies_._Number;			  
+RETURN NEXT;
 END LOOP;
 RETURN;
 END $$
 LANGUAGE plpgsql;
 
---PRUEBITAS---
+--SELECTS---
 DROP FUNCTION _movies_dates_times;
 DROP FUNCTION _movies_directors;
 DROP FUNCTION _movies_actors;
 DROP FUNCTION _movies_genders;
 DROP FUNCTION _movies_reservations;
-DROP FUNCTION _insert_director3;
+DROP FUNCTION _insert_director;
 DROP FUNCTION _insert_actor;
 																			 
-SELECT * FROM _movies_dates_times(1) AS (Movie INT, movie_title VARCHAR(40), movie_translation VARCHAR(40),_screening_date DATE,_screening_hour TIME);
-SELECT * FROM _movies_directors(3) AS (Director_Name VARCHAR(40),Director_Last_Name VARCHAR(200));
-SELECT * FROM _movies_actors(3) AS (Actor_Name VARCHAR(40),Actor_Last_Name VARCHAR(200));
-SELECT * FROM _movies_genders(3) AS (Actor_Name VARCHAR(40));
-SELECT * FROM _movies_reservations(2,1,'01/12/2018','13:00') AS (Seat_Row CHAR, Seat_Number INT);
+SELECT * FROM _movies_directors(3);
+SELECT * FROM _movies_actors(3);
+SELECT * FROM _movies_genders(3);
+SELECT * FROM _movies_reservations(2,1,'01/12/2018','13:00');														
+SELECT * FROM _movies_dates_times(1);
 
-SELECT _insert_director('Nacho','Guapo:3');
 SELECT _insert_cinema('Hola','Alajuela');
 SELECT _insert_gender('Misterio');
 SELECT _insert_auditorium('Sala 10');
+
