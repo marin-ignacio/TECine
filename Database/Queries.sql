@@ -58,24 +58,27 @@ FROM Seats_per_Auditorium;
 SELECT *
 FROM Seats_Reserved;
 
+
+-----******************************************************************************-----
+
 /*
  --@AUTHOR Yenira Chacón
  --@CREATE DATE 15/11/2018
  --DESCRIPTION: Insertion in the table Director
 */
 
-CREATE FUNCTION _insert_director(_pFname VARCHAR(40), _pLname VARCHAR(200)) RETURNS INT AS $$
+CREATE FUNCTION _insert_director(_pName VARCHAR(40), _pLName VARCHAR(200)) RETURNS INT AS $$
 
 BEGIN
-    		IF ( (EXISTS(
-			SELECT Director._Fname
+    		IF ( (EXISTS(       ---If the name exists, does not insert
+			SELECT Director._FName
 			FROM Director
-			WHERE _pFname = Director._Fname
+			WHERE _pName = Director._FName
 			)) AND 
 			(EXISTS(
-			SELECT Director._Lname
+			SELECT Director._LName
 			FROM Director
-			WHERE _pLname = Director._Lname
+			WHERE _pLName = Director._LName
 			)) )THEN
 
         RETURN -1;
@@ -83,12 +86,12 @@ BEGIN
 	ELSE
 																	 
 	DECLARE
-    	_countDirID INT := COUNT(*) FROM Director;
+    	_countDirID INT := COUNT(*) FROM Director; --- Increases Director's ID
 		_tempID INT :=((_countDirID) + 1);
 		
 	BEGIN
-		INSERT INTO Director(_ID, _Fname, _Lname)
-		VALUES(_tempID, _pFname, _pLname);
+		INSERT INTO Director(_ID, _FName, _LName)  --- Inserts directors name if it's different from the existing directors
+		VALUES(_tempID, _pName, _pLName);
 		RETURN _tempID;
 		END;
 		END IF;
@@ -102,11 +105,11 @@ LANGUAGE plpgsql;
  --@CREATE DATE 15/11/2018
  --DESCRIPTION: Insertion in the table Cinema
 */
-DROP FUNCTION _insert_cinema;
+
 CREATE FUNCTION _insert_cinema(_pName VARCHAR(40), _pLocation VARCHAR(200)) RETURNS INT AS $$
 
 BEGIN
-    		IF EXISTS(
+    		IF EXISTS(         --- If the name exists, does not insert
 			SELECT Cinema._Name
 			FROM Cinema
 			WHERE _pName = Cinema._Name
@@ -117,12 +120,12 @@ BEGIN
 	ELSE
 																	 
 	DECLARE
-    	_countCinemaID INT := COUNT(*) FROM Cinema;
+    	_countCinemaID INT := COUNT(*) FROM Cinema; ---Increases Cinema's ID
 		_tempID INT :=((_countCinemaID) + 1);
 		
 	BEGIN
 		RETURN _tempID;
-		INSERT INTO Cinema(_ID, _Name, _Location)
+		INSERT INTO Cinema(_ID, _Name, _Location) ---Inserts into table the Cinema
 		VALUES(_tempID, _pName, _pLocation);
 		END;
 		END IF;
@@ -138,7 +141,7 @@ LANGUAGE plpgsql;
 CREATE FUNCTION _insert_gender(_pName VARCHAR(40)) RETURNS INT AS $$
 
 BEGIN
-    		IF EXISTS(
+    		IF EXISTS(				---If name exists, doesn't inserts
 			SELECT Gender._Name
 			FROM Gender
 			WHERE _pName = Gender._Name
@@ -149,11 +152,11 @@ BEGIN
 	ELSE
 																	 
 	DECLARE
-    	_countGenderID INT := COUNT(*) FROM Gender;
+    	_countGenderID INT := COUNT(*) FROM Gender;		---Increases gender's ID
 		_tempID INT :=((_countGenderID) + 1);
 		
 	BEGIN	
-		INSERT INTO Gender(_ID, _Name)
+		INSERT INTO Gender(_ID, _Name)	---Inserts gender into table
 		VALUES(_tempID, _pName);
 		RETURN _tempID;
 		END;
@@ -170,7 +173,7 @@ LANGUAGE plpgsql;
 CREATE FUNCTION _insert_auditorium(_pName VARCHAR(40)) RETURNS INT AS $$
 
 BEGIN
-    		IF EXISTS(
+    		IF EXISTS(				--- If Auditorium's name exists, doesn't inserts
 			SELECT Auditorium._Name
 			FROM Auditorium
 			WHERE _pName = Auditorium._Name
@@ -181,11 +184,11 @@ BEGIN
 	ELSE
 																	 
 	DECLARE
-    	_countAuditoriumID INT := COUNT(*) FROM Auditorium;
+    	_countAuditoriumID INT := COUNT(*) FROM Auditorium;		---Increases Auditorium's ID
 		_tempID INT :=((_countAuditoriumID) + 1);
 		
 	BEGIN	
-		INSERT INTO Auditorium(_ID, _Name)
+		INSERT INTO Auditorium(_ID, _Name)			---Inserts into table the Auditorium's parameters
 		VALUES(_tempID, _pName);
 		RETURN _tempID;
 		END;
@@ -199,18 +202,18 @@ LANGUAGE plpgsql;
  --@CREATE DATE 15/11/2018
  --DESCRIPTION: Insertion in the table Actor
 */
-CREATE FUNCTION _insert_actor(_pFname VARCHAR(40), _pLname VARCHAR(200)) RETURNS INT AS $$
+CREATE FUNCTION _insert_actor(_pName VARCHAR(40), _pLName VARCHAR(200)) RETURNS INT AS $$
 
 BEGIN
-    		IF ( (EXISTS(
-			SELECT Actor._Fname
+    		IF ( (EXISTS(			---If Actor's name and last name exists, doesn't inserts
+			SELECT Actor._FName
 			FROM Actor
-			WHERE _pFname = Actor._Fname
+			WHERE _pName = Actor._FName
 			)) AND 
 			(EXISTS(
-			SELECT Actor._Lname
+			SELECT Actor._LName
 			FROM Actor
-			WHERE _pLname = Actor._Lname
+			WHERE _pLName = Actor._LName
 			)) )THEN
 
         RETURN -1;
@@ -218,12 +221,12 @@ BEGIN
 	ELSE
 																	 
 	DECLARE
-    	_countActorID INT := COUNT(*) FROM Actor;
+    	_countActorID INT := COUNT(*) FROM Actor; 		---Increases Actor's ID
 		_tempID INT :=((_countActorID) + 1);
 		
 	BEGIN
-		INSERT INTO Actor(_ID, _Fname, _Lname)
-		VALUES(_tempID, _pFname, _pLname);
+		INSERT INTO Actor(_ID, _FName, _LName)			---Inserts into table
+		VALUES(_tempID, _pName, _pLName);
 		RETURN _tempID;
 		END;
 		END IF;
@@ -237,12 +240,12 @@ LANGUAGE plpgsql;
  --@CREATE DATE 15/11/2018
  --DESCRIPTION: Insertion in the table Movie
 */
-DROP FUNCTION _insert_movie;
+
 CREATE FUNCTION _insert_movie(_pTitle VARCHAR(40), _pDuration VARCHAR(200),_pDescription VARCHAR(1000),_pImage varchar(100)) 
 RETURNS INT AS $$
 
 BEGIN
-    		IF EXISTS(
+    		IF EXISTS(			---If movie's title exists, doesn't insert
 			SELECT Movie._Title
 			FROM Movie
 			WHERE _pTitle = Movie._Title
@@ -253,19 +256,53 @@ BEGIN
 	ELSE
 																	 
 	DECLARE
-    	_countMovieID INT := COUNT(*) FROM Movie;
+    	_countMovieID INT := COUNT(*) FROM Movie;	---Increases movie's ID
 		_tempID INT :=((_countMovieID) + 1);
 		
 	BEGIN
-		RETURN _tempID;
-		INSERT INTO Movie(_ID, _Title,_Duration_min, _Description, _Image)
+		INSERT INTO Movie(_ID, _Title,_Duration_min, _Description, _Image)	---Inserts into movie
 		VALUES(_tempID, _pTitle, _pDuration, _pDescription, read_binary_file(_pImage));
+		RETURN _tempID;
 		END;
 		END IF;
 END $$
 
 LANGUAGE plpgsql;
-																			 
+
+/*
+ --@AUTHOR Yenira Chacón
+ --@CREATE DATE 15/11/2018
+ --DESCRIPTION: Insertion in the Reservation table
+*/		
+DROP FUNCTION _insert_reservation;
+CREATE FUNCTION _insert_reservation(_pScreening INT, _pActive BOOL) RETURNS INT AS $$
+
+BEGIN
+		IF EXISTS(			---If movie's title exists, doesn't insert
+			SELECT Screening._ID
+			FROM Screening
+			WHERE _pScreening = Screening._ID
+			) THEN
+
+        RETURN -1;
+
+	ELSE
+				
+	DECLARE
+    	_countReservationID INT := COUNT(*) FROM Reservation; 		---Increases Reservation's ID
+		_tempID INT :=((_countReservationID) + 1);
+		
+	BEGIN
+		INSERT INTO Reservation(_ID, _Screening_ID, _Active)			---Inserts into table
+		VALUES(_tempID, _pScreening, _pActive);
+		RETURN _tempID;
+		END;
+		END IF;
+END $$
+
+LANGUAGE plpgsql;
+				
+-----******************************************************************************-----
 																			 
 /*
  --@AUTHOR Yenira Chacón
@@ -292,7 +329,8 @@ END LOOP;
 RETURN;
 END $$
 LANGUAGE plpgsql;
-																			
+																			 
+-----******************************************************************************-----																			
 				
 /*
  --@AUTHOR Yenira Chacón
@@ -346,7 +384,7 @@ RETURN;
 END $$
 LANGUAGE plpgsql;
 
-																			 /*
+/*
  --@AUTHOR Yenira Chacón
  --@CREATE DATE 21/11/2018
  --DESCRIPTION: Inner Join Movie, genders
@@ -400,7 +438,8 @@ RETURN;
 END $$
 LANGUAGE plpgsql;
 
---SELECTS---
+-----******************************************************************************-----
+								  
 DROP FUNCTION _movies_dates_times;
 DROP FUNCTION _movies_directors;
 DROP FUNCTION _movies_actors;
@@ -418,4 +457,6 @@ SELECT * FROM _movies_dates_times(1);
 SELECT _insert_cinema('Hola','Alajuela');
 SELECT _insert_gender('Misterio');
 SELECT _insert_auditorium('Sala 10');
+SELECT _insert_reservation(16,true);
 
+-----******************************************************************************-----
