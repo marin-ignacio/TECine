@@ -62,57 +62,6 @@ FROM Seats_Reserved;
 -----******************************************************************************-----
 
 
-SELECT * 
-FROM Screening;
-
-SELECT *
-FROM Movie;
-
-SELECT *
-FROM Actor;
-
-SELECT *
-FROM Actors_per_Movie;
-
-SELECT *
-FROM Auditorium;
-
-SELECT *
-FROM Cinema;
-
-SELECT *
-FROM Auditoriums_per_Cinema;
-
-SELECT *
-FROM Director;
-
-SELECT *
-FROM Directors_per_Movie;
-
-SELECT *
-FROM Gender;
----Selects every gender per movie
-SELECT *
-FROM Genders_per_Movie;
-
----Selects Reservation's table
-SELECT *
-FROM Reservation;
-
----Selects Seat table
-SELECT *
-FROM Seat;
-
----Select Seats per auditorium
-SELECT *
-FROM Seats_per_Auditorium;
-
----Selects the seats that are reserved
-SELECT *
-FROM Seats_Reserved;
-
------******************************************************************************-----
-
 /*
  --@AUTHOR Yenira Chacón
  --@CREATE DATE 15/11/2018
@@ -320,6 +269,39 @@ BEGIN
 END $$
 
 LANGUAGE plpgsql;
+/*
+ --@AUTHOR Yenira Chacón
+ --@CREATE DATE 15/11/2018
+ --DESCRIPTION: Insertion in the table Cinema
+*/
+
+CREATE OR REPLACE FUNCTION _insert_screening(_pCinemaID INT, _pAuditoriumID INT, _pMovieID INT,_pDate DATE, _pHour TIME) RETURNS INT AS $$
+
+BEGIN
+    		IF (EXISTS(       ---If the ID exist, do not insert
+			SELECT Screening._Cinema_ID,Screening._Auditorium_ID, Screening._Movie_ID, Screening._Date, Screening._Start_time
+			FROM Screening
+			WHERE _pCinemaID = _Cinema_ID AND _pAuditoriumID = _Auditorium_ID AND _pMovieID = _Movie_ID AND _pDate = _Date AND _pHour = _Start_time
+			) )THEN
+
+        RETURN -1;
+																	 
+	ELSE
+	
+	DECLARE
+		_countScreeningID INT := COUNT(*) FROM Screening; 		---Increases Screening's ID
+		_tempID INT :=((_countScreeningID) + 1);
+		
+	BEGIN
+		INSERT INTO Screening(_ID,_Cinema_ID,_Auditorium_ID,_Movie_ID,_Date,_Start_time) --- Inserts gender with movie if it's different from the existing directors
+		VALUES(_tempID,_pCinemaID, _pAuditoriumID, _pMovieID, _pDate, _pHour);
+		RETURN _pCinemaID;
+		END;
+		END IF;
+		
+END $$
+
+LANGUAGE plpgsql;
 
 /*
  --@AUTHOR Yenira Chacón
@@ -352,35 +334,7 @@ BEGIN
 END $$
 
 LANGUAGE plpgsql;
-/*
- --@AUTHOR Yenira Chacón
- --@CREATE DATE 15/11/2018
- --DESCRIPTION: Insertion in the table Screening
-*/
-
-CREATE FUNCTION _insert_screening(_pCinemaID INT, _pAuditoriumID INT, _pMovieID INT,_pDate DATE, _pHour TIME) RETURNS INT AS $$
-
-BEGIN
-    		IF (EXISTS(       ---If the ID exist, do not insert
-			SELECT Screening._Cinema_ID,Screening._Auditorium_ID, Screening._Movie_ID, Screening._Date, Screening._Start_time
-			FROM Screening
-			WHERE _pCinemaID = _Cinema_ID AND _pAuditorium = _Auditorium_ID AND _pMovie = _Movie_ID AND _pDate = _Date AND _pHour = _Start_time
-			) )THEN
-
-        RETURN -1;
-																	 
-	ELSE
-		
-	BEGIN
-		INSERT INTO Screening(_ID,_Cinema_ID,_Auditorium_ID,_Movie_ID,_Date,_Start_time) --- Inserts Screening's ID with movie if it's different from the existing data in table
-		VALUES(_pCinemaID, _pAuditorium, _pMovie, _pDate, _pHour);
-		RETURN _pCinemaID;
-		END;
-		END IF;
-		
-END $$
-
-LANGUAGE plpgsql;																  
+																  
 /*
  --@AUTHOR Yenira Chacón
  --@CREATE DATE 21/11/2018
@@ -694,4 +648,39 @@ END $$
 LANGUAGE plpgsql;
 -----******************************************************************************-----
 								  
+DROP FUNCTION _movies_dates_times;
+DROP FUNCTION _movies_directors;
+DROP FUNCTION _movies_actors;
+DROP FUNCTION _movies_genders;
+DROP FUNCTION _movies_reservations;
+DROP FUNCTION _insert_director;
+DROP FUNCTION _insert_actor;
+																			 
+SELECT * FROM _movies_directors(3);
+SELECT * FROM _movies_actors(3);
+SELECT * FROM _movies_genders(3);
+SELECT * FROM _movies_reservations(2,1,'01/12/2018','13:00');														
+SELECT * FROM _movies_dates_times(1,'01/12/2018');
+SELECT * FROM _movies_per_date(1,3,'01/12/2018');
+SELECT * FROM generate_seats(6);
+						
+SELECT _insert_cinema('Hola','Alajuela');
+SELECT _insert_gender('Misterio');
+SELECT _insert_auditorium('Sala 10');
+SELECT _insert_reservation(16,true);
+SELECT _insert_screening(5,2,4,'30/11/2018','20:50');
+SELECT _auditorium_seats(1,2);
+								  
+INSERT INTO Auditorium
+	(_ID, _Name)
+VALUES
+	(6,'Sala 6');
+								  
+INSERT INTO Auditoriums_per_Cinema
+	(_Cinema_ID, _Auditorium_ID)
+VALUES
+	(1,6);
+								  
+SELECT _insert_genders_per_movie(1,4);
+
 
