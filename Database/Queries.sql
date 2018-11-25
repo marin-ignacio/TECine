@@ -242,7 +242,7 @@ LANGUAGE plpgsql;
  --DESCRIPTION: Insertion in the table Movie
 */
 
-CREATE FUNCTION _insert_movie(_pTitle VARCHAR(40), _pDuration VARCHAR(200),_pDescription VARCHAR(1000),_pImage varchar(100)) 
+CREATE FUNCTION _insert_movie(_pTitle VARCHAR(40),_pTranslation VARCHAR(40), _pDuration VARCHAR(200),_pDescription VARCHAR(1000),_pImage varchar(10485760)) 
 RETURNS INT AS $$
 
 BEGIN
@@ -252,7 +252,7 @@ BEGIN
 			WHERE _pTitle = Movie._Title
 			) THEN
 
-        RAISE NOTICE 'That name already exists';
+        RETURN -1;
 
 	ELSE
 																	 
@@ -261,8 +261,8 @@ BEGIN
 		_tempID INT :=((_countMovieID) + 1);
 		
 	BEGIN
-		INSERT INTO Movie(_ID, _Title,_Duration_min, _Description, _Image)	---Inserts into movie
-		VALUES(_tempID, _pTitle, _pDuration, _pDescription, read_binary_file(_pImage));
+		INSERT INTO Movie(_ID, _Title, _Translation, _Duration_min, _Description, _Image)	---Inserts into movie
+		VALUES(_tempID, _pTitle, _pTranslation, _pDuration, _pDescription, _pImage);
 		RETURN _tempID;
 		END;
 		END IF;
